@@ -52,8 +52,6 @@ export function Call({ room, setRoom, callFrame, setCallFrame, expiry }) {
 
   useEffect(() => {
     if (callFrame) return;
-
-    console.log('Creating new call');
     createAndJoinCall();
   }, []);
 

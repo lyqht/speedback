@@ -1,5 +1,5 @@
 import { Button, TextInput } from 'flowbite-react';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { useState } from 'react';
 import { v4 } from 'uuid';
 
@@ -8,7 +8,6 @@ export default function createShip() {
   const [captainName, setCaptainName] = useState('');
   const [shipName, setShipName] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   return (
     <div>
@@ -47,7 +46,7 @@ export default function createShip() {
             const resJson = await response.json();
             const currentShipId = resJson.id;
             localStorage.setItem('currentShipId', currentShipId);
-            router.push(`/ship/${currentShipId}`);
+            Router.push(`/ship/${currentShipId}`);
           }
           setLoading(false);
         }}
