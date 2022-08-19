@@ -1,7 +1,8 @@
 import ExpiryTimer from '@/components/ExpiryTimer';
 import DailyIframe from '@daily-co/daily-js';
-import { Button, Card, TextInput } from 'flowbite-react';
-import { useEffect, useRef, useState } from 'react';
+import { Card } from 'flowbite-react';
+import { useEffect, useRef } from 'react';
+import Clipboard from './Clipboard';
 
 // TODO: checkout responsive iframe styles
 // https://www.benmarshall.me/responsive-iframes/
@@ -21,13 +22,6 @@ const CALL_OPTIONS = {
 export function Call({ room, setRoom, callFrame, setCallFrame, expiry }) {
   const callRef = useRef(null);
   let isAlreadyCreated = false;
-  const [isLinkCopied, setIsLinkCopied] = useState(false);
-
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText(room);
-    setIsLinkCopied(true);
-    setTimeout(() => setIsLinkCopied(false), 5000);
-  };
 
   const leaveCall = () => {
     setRoom(null);
@@ -61,19 +55,7 @@ export function Call({ room, setRoom, callFrame, setCallFrame, expiry }) {
         <div id="call" ref={callRef} />
         <Card>
           <p>Copy and share the URL to invite others</p>
-          <div>
-            <label htmlFor="copy-url"></label>
-            <TextInput
-              type="text"
-              id="copy-url"
-              placeholder="Copy this room URL"
-              value={room}
-              pattern="^(https:\/\/)?[\w.-]+(\.(daily\.(co)))+[\/\/]+[\w.-]+$"
-            />
-            <Button onClick={handleCopyClick}>
-              {isLinkCopied ? 'Copied!' : `Copy room URL`}
-            </Button>
-          </div>
+          <Clipboard value={room} fieldToBeCopied={'room URL'} />
           <div>
             {expiry && (
               <div>
