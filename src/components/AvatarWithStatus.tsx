@@ -2,7 +2,6 @@ import Avvvatars from 'avvvatars-react';
 import { Badge } from 'flowbite-react';
 
 interface AvatarProps {
-  key?: string;
   name: string;
 }
 
@@ -10,9 +9,9 @@ interface CrewAvatarProps extends AvatarProps {
   ready: boolean;
 }
 
-const Captain: React.FC<AvatarProps> = ({ key, name }) => {
+const Captain: React.FC<AvatarProps> = ({ name }) => {
   return (
-    <div key={key} className="p-4 border-4 border-solid border-slate-400">
+    <div className="p-4 w-1/2">
       <div className="flex justify-center items-center">
         <div className="relative">
           <Avvvatars value={name} style="shape" size={48} />
@@ -29,9 +28,9 @@ const Captain: React.FC<AvatarProps> = ({ key, name }) => {
   );
 };
 
-const Crew: React.FC<CrewAvatarProps> = ({ key, name, ready }) => {
+const Crew: React.FC<CrewAvatarProps> = ({ name, ready }) => {
   return (
-    <div key={key} className="p-4 border-4 border-solid border-slate-400">
+    <div className="p-4 border-4 border-solid border-slate-400">
       <div className="flex">
         <div>
           <Avvvatars value={name} style="shape" />
@@ -45,9 +44,9 @@ const Crew: React.FC<CrewAvatarProps> = ({ key, name, ready }) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
@@ -60,9 +59,9 @@ const Crew: React.FC<CrewAvatarProps> = ({ key, name, ready }) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
