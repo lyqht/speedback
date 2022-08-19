@@ -13,7 +13,7 @@ export interface Database {
         Row: {
           id: string;
           created_at: string | null;
-          captain: string | null;
+          captain: string;
           crew: Json[] | null;
           code: string | null;
           name: string | null;
