@@ -16,15 +16,8 @@ const Clipboard: React.FC<Props> = ({ value, fieldToBeCopied }) => {
   };
 
   return (
-    <div>
-      <label htmlFor="copy-text"></label>
-      <TextInput
-        type="text"
-        id="copy-text"
-        placeholder={`Copy this ${fieldToBeCopied}`}
-        value={value}
-        pattern="^(https:\/\/)?[\w.-]+(\.(daily\.(co)))+[\/\/]+[\w.-]+$"
-      />
+    <div className="border shadow border-indigo-600">
+      <p className="w-full p-4 font-bold">{value}</p>
       <Button onClick={handleCopyClick}>
         {isLinkCopied ? 'Copied!' : `Copy ${fieldToBeCopied}`}
       </Button>
