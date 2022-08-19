@@ -6,7 +6,6 @@ import { useState } from 'react';
 export default function joinShip() {
   const { user } = useUser();
   const [shipCode, setShipCode] = useState('');
-  const [nickname, setNickname] = useState('');
   const [loading, setLoading] = useState(false);
 
   return (
@@ -21,15 +20,6 @@ export default function joinShip() {
         minLength={6}
         maxLength={6}
         onChange={(e) => setShipCode(e.target.value)}
-      />
-      <TextInput
-        type="text"
-        id="nickname-input"
-        placeholder="Zoroto"
-        value={nickname}
-        minLength={1}
-        required={true}
-        onChange={(e) => setNickname(e.target.value)}
       />
       <Button
         disabled={loading}

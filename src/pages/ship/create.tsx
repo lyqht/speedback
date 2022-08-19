@@ -1,25 +1,17 @@
 import { useUser } from '@supabase/auth-helpers-react';
-import { Button, TextInput } from 'flowbite-react';
+import { Button, Label, TextInput } from 'flowbite-react';
 import Router from 'next/router';
 import { useState } from 'react';
 
 export default function createShip() {
   const { user } = useUser();
-  const [captainName, setCaptainName] = useState('');
   const [shipName, setShipName] = useState('');
   const [loading, setLoading] = useState(false);
 
   return (
     <div>
       <h1>Create a Ship for your crew to join!</h1>
-      <TextInput
-        type="text"
-        id="captain-name-input"
-        placeholder="Luffy"
-        value={captainName}
-        minLength={1}
-        onChange={(e) => setCaptainName(e.target.value)}
-      />
+      <Label value="Give your new mighty ship a name" />
       <TextInput
         type="text"
         id="ship-name-input"
