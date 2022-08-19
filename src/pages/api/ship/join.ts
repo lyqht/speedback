@@ -16,7 +16,7 @@ const joinShip = async ({
   };
 
   const { data: ships, error: getShipError } = await supabase
-    .from('Ship')
+    .from<Ship>('Ship')
     .select()
     .eq('code', shipCode)
     .select();
@@ -33,7 +33,9 @@ const joinShip = async ({
     .map((member) => member.userId)
     .includes(newCrewMember.userId);
 
-  if (crewIsAlreadyInRoom) {
+  const userIsCaptain = foundShip.captain === userId;
+
+  if (crewIsAlreadyInRoom || userIsCaptain) {
     return foundShip;
   }
 
