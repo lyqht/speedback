@@ -1,9 +1,11 @@
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Button, Label, TextInput } from 'flowbite-react';
-import { useEffect, useState } from 'react';
-import isEmail from 'validator/lib/isEmail';
+import { useState } from 'react';
 
-const Login = ({ setCurrentUser }) => {
+type LoginMode = 'signUp' | 'signIn';
+
+const Login = () => {
+  const [loginMode, setLoginMode] = useState<LoginMode>('signUp');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
@@ -12,7 +14,35 @@ const Login = ({ setCurrentUser }) => {
     <div>
       <i className="text-lg">Ready to join the cruise?</i>
       <div className="py-4">
-        <h1>Create an account</h1>
+        <div className="flex-row flex items-center">
+          {loginMode === 'signIn' ? (
+            <>
+              <p className="pr-4 py-4 underline decoration-black">Sign In</p>
+              <button
+                className="hover:underline decoration-black"
+                onClick={() => {
+                  setLoginMode('signUp');
+                }}
+              >
+                Create an account
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="hover:underline decoration-black"
+                onClick={() => {
+                  setLoginMode('signIn');
+                }}
+              >
+                Sign in
+              </button>
+              <p className="p-4 underline decoration-black">
+                Create for an account
+              </p>
+            </>
+          )}
+        </div>
         <div className="flex flex-col gap-4">
           <div className="mb-2 block">
             <Label htmlFor="email1" value="Your email" />
@@ -43,19 +73,25 @@ const Login = ({ setCurrentUser }) => {
       </div>
       <div className="py-4">
         <Button
+          color={'success'}
           onClick={async () => {
-            const response = await supabaseClient.auth.signUp({
-              email,
-              password,
-            });
+            let response;
+            if (loginMode === 'signUp') {
+              response = await supabaseClient.auth.signUp({
+                email,
+                password,
+              });
+            } else {
+              response = await supabaseClient.auth.signIn({
+                email,
+                password,
+              });
+            }
 
-            console.log({ response });
             if (response.error) {
               console.error(response.error);
               setErrorText(response.error.message);
             }
-
-            setCurrentUser(response.data);
           }}
         >
           Submit

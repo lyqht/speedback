@@ -1,10 +1,10 @@
+import { useUser } from '@supabase/auth-helpers-react';
 import { Button, TextInput } from 'flowbite-react';
 import Router from 'next/router';
 import { useState } from 'react';
-import { v4 } from 'uuid';
 
-//TODO: add error handling
 export default function createShip() {
+  const { user } = useUser();
   const [captainName, setCaptainName] = useState('');
   const [shipName, setShipName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,11 +32,9 @@ export default function createShip() {
         disabled={loading}
         onClick={async () => {
           setLoading(true);
-          const userId = v4();
-          localStorage.setItem('userId', userId);
           const response = await fetch(`/api/ship`, {
             method: 'POST',
-            body: JSON.stringify({ captain: userId, ship: shipName }),
+            body: JSON.stringify({ captain: user!.id, ship: shipName }),
             headers: {
               'Content-Type': 'application/json',
             },
@@ -45,7 +43,6 @@ export default function createShip() {
           if (response.status === 200) {
             const resJson = await response.json();
             const currentShipId = resJson.id;
-            localStorage.setItem('currentShipId', currentShipId);
             Router.push(`/ship/${currentShipId}`);
           }
           setLoading(false);
