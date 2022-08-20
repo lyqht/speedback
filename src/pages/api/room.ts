@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+const getExpiryDateOfRoom = () => Math.round(Date.now() / 1000) + 3600;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -17,8 +19,9 @@ export default async function handler(
           enable_prejoin_ui: true,
           enable_network_ui: true,
           enable_screenshare: true,
+          enable_people_ui: true,
           enable_chat: true,
-          exp: Math.round(Date.now() / 1000) + 300,
+          exp: getExpiryDateOfRoom(),
           eject_at_room_exp: true,
         },
       }),

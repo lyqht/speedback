@@ -1,3 +1,5 @@
+import { Room } from '@/services/RoomService';
+
 export type Json =
   | string
   | number
@@ -61,18 +63,24 @@ export interface Database {
           created_at: string | null;
           shipId: string | null;
           sequence: Json | null;
+          rooms: Room[] | null;
+          active: boolean | null;
         };
         Insert: {
           id?: number;
           created_at?: string | null;
           shipId?: string | null;
           sequence?: Json | null;
+          rooms?: Json | null;
+          active?: boolean | null;
         };
         Update: {
           id?: number;
           created_at?: string | null;
           shipId?: string | null;
           sequence?: Json | null;
+          rooms?: Json | null;
+          active?: boolean | null;
         };
       };
     };

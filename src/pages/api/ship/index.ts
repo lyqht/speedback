@@ -3,14 +3,14 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 } from 'uuid';
 import { supabase } from '../auth/[...supabase]';
 
-const createShipAndSchedule = async ({
+const createShip = async ({
   captain,
   ship,
 }: {
   captain: string;
   ship: string;
 }) => {
-  const { data: createdShip, error: createShipError } = await supabase
+  const { data: createdShips, error: createShipError } = await supabase
     .from('Ship')
     .insert({
       captain,
@@ -25,19 +25,7 @@ const createShipAndSchedule = async ({
     throw new Error(JSON.stringify(createShipError));
   }
 
-  const { data: createdSchedule, error: createScheduleError } = await supabase
-    .from('Schedule')
-    .insert([{ shipId: createdShip[0].id }])
-    .select();
-
-  if (createScheduleError) {
-    throw new Error(JSON.stringify(createScheduleError));
-  }
-
-  return {
-    createdShip,
-    createdSchedule,
-  };
+  return createdShips[0];
 };
 
 export default async function handler(
@@ -51,15 +39,15 @@ export default async function handler(
     }
 
     try {
-      const response = await createShipAndSchedule({
+      const createdShip = await createShip({
         captain,
         ship,
       });
 
       return res.status(200).json({
-        captain: response.createdShip[0].captain,
-        name: response.createdShip[0].name,
-        id: response.createdShip[0].id,
+        captain: createdShip.captain,
+        name: createdShip.name,
+        id: createdShip.id,
       });
     } catch (err) {
       console.error(err);
