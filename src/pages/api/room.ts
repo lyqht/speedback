@@ -6,12 +6,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
+  if (req.method === `POST`) {
     const options = {
-      method: 'POST',
+      method: `POST`,
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: `application/json`,
+        'Content-Type': `application/json`,
         Authorization: `Bearer ${process.env.DAILY_API_KEY}`,
       },
       body: JSON.stringify({

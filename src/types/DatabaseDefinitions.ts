@@ -84,6 +84,5 @@ export interface Database {
         };
       };
     };
-    Functions: {};
   };
 }

@@ -1,5 +1,5 @@
+import { Button } from 'flowbite-react';
 import { useState } from 'react';
-import { Button, TextInput } from 'flowbite-react';
 
 interface Props {
   value: string;
@@ -19,7 +19,7 @@ const Clipboard: React.FC<Props> = ({ value, fieldToBeCopied }) => {
     <div className="border shadow border-indigo-600">
       <p className="w-full p-4 font-bold">{value}</p>
       <Button onClick={handleCopyClick}>
-        {isLinkCopied ? 'Copied!' : `Copy ${fieldToBeCopied}`}
+        {isLinkCopied ? `Copied!` : `Copy ${fieldToBeCopied}`}
       </Button>
     </div>
   );

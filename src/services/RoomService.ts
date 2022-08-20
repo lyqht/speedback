@@ -8,10 +8,10 @@ export type Room = Json & {
 
 export const createRoom = async (): Promise<Room> => {
   try {
-    const res = await fetch('/api/room', {
-      method: 'POST',
+    const res = await fetch(`/api/room`, {
+      method: `POST`,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': `application/json`,
       },
     });
     const result = await res.json();

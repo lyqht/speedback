@@ -5,17 +5,17 @@ import { Room } from '../../../services/RoomService';
 
 const setExistingSchedulesInactive = async (shipId: string) => {
   const { data, error } = await supabase
-    .from<Schedule>('Schedule')
+    .from<Schedule>(`Schedule`)
     .update({
       active: false,
     })
-    .eq('shipId', shipId);
+    .eq(`shipId`, shipId);
 
   if (error) {
     console.warn(error);
   }
 
-  console.log('Set schedules inactive: ' + JSON.stringify(data));
+  console.log(`Set schedules inactive: ` + JSON.stringify(data));
 };
 
 const addSchedule = async (
@@ -23,7 +23,7 @@ const addSchedule = async (
   sequence: PairingRoundSequence,
   rooms: Room[],
 ) => {
-  const { data, error } = await supabase.from<Schedule>('Schedule').insert({
+  const { data, error } = await supabase.from<Schedule>(`Schedule`).insert({
     shipId,
     sequence,
     rooms,
@@ -39,10 +39,10 @@ const addSchedule = async (
 
 const getActiveSchedule = async (scheduleId: string) => {
   const { data, error } = await supabase
-    .from<Schedule>('Schedule')
+    .from<Schedule>(`Schedule`)
     .select()
-    .eq('id', scheduleId)
-    .eq('active', true);
+    .eq(`id`, scheduleId)
+    .eq(`active`, true);
 
   if (error) {
     throw new Error(JSON.stringify(error));
@@ -55,10 +55,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
+  if (req.method === `POST`) {
     const { shipId, sequence, rooms } = req.body;
     if (!shipId || !sequence || !rooms) {
-      return res.status(400).json('Nope');
+      return res.status(400).json(`Nope`);
     }
 
     try {
@@ -67,12 +67,12 @@ export default async function handler(
       res.status(200).json(data);
     } catch (err) {
       console.error(err);
-      res.status(400).json('Error creating new schedule');
+      res.status(400).json(`Error creating new schedule`);
     }
-  } else if (req.method === 'GET') {
+  } else if (req.method === `GET`) {
     const { id } = req.query;
     if (!id) {
-      return res.status(400).json('Nope');
+      return res.status(400).json(`Nope`);
     }
 
     try {

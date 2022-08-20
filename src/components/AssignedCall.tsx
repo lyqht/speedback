@@ -8,12 +8,12 @@ import { useEffect, useRef } from 'react';
 const CALL_OPTIONS = {
   showLeaveButton: true,
   iframeStyle: {
-    height: '100%',
-    width: '100%',
-    aspectRatio: '16 / 9',
-    minwidth: '400px',
-    border: '0',
-    borderRadius: '12px',
+    height: `100%`,
+    width: `100%`,
+    aspectRatio: `16 / 9`,
+    minwidth: `400px`,
+    border: `0`,
+    borderRadius: `12px`,
   },
 };
 
@@ -45,7 +45,7 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }: Props) {
     );
 
     newCallFrame.join({ url: room });
-    newCallFrame.on('left-meeting', leaveCall);
+    newCallFrame.on(`left-meeting`, leaveCall);
     setCallFrame(newCallFrame);
     isAlreadyCreated = true;
   };

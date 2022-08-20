@@ -16,9 +16,9 @@ const joinShip = async ({
   };
 
   const { data: ships, error: getShipError } = await supabase
-    .from<Ship>('Ship')
+    .from<Ship>(`Ship`)
     .select()
-    .eq('code', shipCode)
+    .eq(`code`, shipCode)
     .select();
 
   if (getShipError) {
@@ -40,11 +40,11 @@ const joinShip = async ({
   }
 
   const { data, error } = await supabase
-    .from('Ship')
+    .from(`Ship`)
     .update({
       crew: [...(currentCrew ?? []), newCrewMember],
     })
-    .eq('id', shipId)
+    .eq(`id`, shipId)
     .select();
 
   if (error) {
@@ -58,10 +58,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
+  if (req.method === `POST`) {
     const { userId, shipCode } = req.body;
     if (!userId || !shipCode) {
-      return res.status(400).json('Nope');
+      return res.status(400).json(`Nope`);
     }
 
     try {

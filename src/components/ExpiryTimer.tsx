@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 export const ExpiryTimer = ({ expiry }: { expiry: number }) => {
-  const [secs, setSecs] = useState<string | null>('--:--');
+  const [secs, setSecs] = useState<string | null>(`--:--`);
 
   useEffect(() => {
     if (!expiry) {

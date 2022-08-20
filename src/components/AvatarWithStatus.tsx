@@ -16,7 +16,7 @@ const Captain: React.FC<AvatarProps> = ({ name }) => {
         <div className="relative">
           <Avvvatars value={name} style="shape" size={48} />
           <Badge
-            style={{ position: 'absolute', bottom: -12, left: 2 }}
+            style={{ position: `absolute`, bottom: -12, left: 2 }}
             color="purple"
           >
             Host

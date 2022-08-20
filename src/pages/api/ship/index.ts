@@ -11,7 +11,7 @@ const createShip = async ({
   ship: string;
 }) => {
   const { data: createdShips, error: createShipError } = await supabase
-    .from('Ship')
+    .from(`Ship`)
     .insert({
       captain,
       name: ship,
@@ -32,10 +32,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
+  if (req.method === `POST`) {
     const { captain, ship } = req.body;
     if (!captain || !ship) {
-      return res.status(400).json('Nope');
+      return res.status(400).json(`Nope`);
     }
 
     try {
@@ -53,15 +53,15 @@ export default async function handler(
       console.error(err);
       return res.status(400).json(err);
     }
-  } else if (req.method === 'GET') {
+  } else if (req.method === `GET`) {
     const { id } = req.query;
-    const { data, error } = await supabase.from('Ship').select().eq('id', id);
+    const { data, error } = await supabase.from(`Ship`).select().eq(`id`, id);
     if (error) {
       return res.status(400).json(error);
     }
 
     if (data.length === 0) {
-      return res.status(404).json('Ship not found');
+      return res.status(404).json(`Ship not found`);
     }
 
     return res.status(200).json(data[0]);

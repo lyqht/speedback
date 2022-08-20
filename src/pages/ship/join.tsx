@@ -3,9 +3,9 @@ import { Button, Label, TextInput } from 'flowbite-react';
 import Router from 'next/router';
 import { useState } from 'react';
 
-export default function joinShip() {
+export default function JoinShip() {
   const { user } = useUser();
-  const [shipCode, setShipCode] = useState('');
+  const [shipCode, setShipCode] = useState(``);
   const [loading, setLoading] = useState(false);
 
   return (
@@ -26,10 +26,10 @@ export default function joinShip() {
         onClick={async () => {
           setLoading(true);
           const response = await fetch(`/api/ship/join`, {
-            method: 'POST',
+            method: `POST`,
             body: JSON.stringify({ userId: user!.id, shipCode }),
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': `application/json`,
             },
           });
 

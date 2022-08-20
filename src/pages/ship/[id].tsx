@@ -20,10 +20,10 @@ interface Props {
 
 const setReadyStatus = async (userId: string, shipId: string) => {
   await fetch(`/api/ship/${shipId}`, {
-    method: 'POST',
+    method: `POST`,
     body: JSON.stringify({ userId, shipId }),
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': `application/json`,
     },
   });
 };
@@ -38,10 +38,10 @@ const startSpeedbackSession = async (playerIds: string[], shipId: string) => {
     const rooms = await Promise.all(roomsToCreate);
 
     await fetch(`/api/schedule`, {
-      method: 'POST',
+      method: `POST`,
       body: JSON.stringify({ sequence, shipId, rooms }),
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': `application/json`,
       },
     });
   } catch (err) {
@@ -50,10 +50,10 @@ const startSpeedbackSession = async (playerIds: string[], shipId: string) => {
 };
 
 const addRealtimeNotification = (newContent: string) => {
-  const newElement = document.createElement('p');
+  const newElement = document.createElement(`p`);
   newElement.appendChild(document.createTextNode(newContent));
 
-  const notificationsCorner = document.getElementById('realtime-notifications');
+  const notificationsCorner = document.getElementById(`realtime-notifications`);
   notificationsCorner?.appendChild(newElement);
 
   setTimeout(() => {
@@ -71,15 +71,15 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
     // subscriber for ready checks
     const readySubscriber = supabaseClient
       .from(`Ship:id=eq.${ship.id}`)
-      .on('UPDATE', (payload) => {
+      .on(`UPDATE`, (payload) => {
         setCurrentCrew(payload.new.crew);
       })
       .subscribe();
 
     const scheduleSubscriber = supabaseClient
       .from(`Schedule:shipId=eq.${ship.id}`)
-      .on('INSERT', (payload) => {
-        console.log('New schedule added');
+      .on(`INSERT`, (payload) => {
+        console.log(`New schedule added`);
         console.log(payload.new);
         const insertedSchedule: Schedule = payload.new;
         Router.push(`/room?scheduleId=${insertedSchedule.id}`);
@@ -98,14 +98,14 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
     currentCrew.filter((member: CrewMember) => member.ready === true).length ===
       currentCrew.length;
 
-  const crewActionButtonColor = ready ? 'bg-red-400' : 'bg-green-400';
+  const crewActionButtonColor = ready ? `bg-red-400` : `bg-green-400`;
 
   return (
     <div className="h-full">
       <h1>{ship.name}</h1>
       <p>Host: {ship.captain}</p>
       {ship.code && (
-        <Clipboard value={ship.code} fieldToBeCopied={'room code'} />
+        <Clipboard value={ship.code} fieldToBeCopied={`room code`} />
       )}
       <div id="participant-list">
         <p>Crew joined: {currentCrew.length ?? 0}</p>
@@ -141,7 +141,7 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
             <button
               disabled={!allCrewIsReady}
               className={`${
-                allCrewIsReady ? 'bg-green-400' : 'bg-gray-400'
+                allCrewIsReady ? `bg-green-400` : `bg-gray-400`
               } hover:shadow-lg transition-colors p-4 shadow-sm border text-white rounded-lg`}
               onClick={() => {
                 startSpeedbackSession(

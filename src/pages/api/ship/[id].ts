@@ -5,9 +5,9 @@ import { supabase } from '../auth/[...supabase]';
 
 const setReadyStatus = async (userId: string, shipId: string) => {
   const { data: ships, error: getShipError } = await supabase
-    .from<Ship>('Ship')
+    .from<Ship>(`Ship`)
     .select()
-    .eq('id', shipId)
+    .eq(`id`, shipId)
     .select();
 
   if (getShipError) {
@@ -32,11 +32,11 @@ const setReadyStatus = async (userId: string, shipId: string) => {
   updatedCrew[currentCrewIndex] = foundMember;
 
   const { data, error } = await supabase
-    .from('Ship')
+    .from(`Ship`)
     .update({
       crew: updatedCrew,
     })
-    .eq('id', shipId)
+    .eq(`id`, shipId)
     .select();
 
   if (error) {
@@ -50,7 +50,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
+  if (req.method === `POST`) {
     const { userId, shipId } = req.body;
 
     try {

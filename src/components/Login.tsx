@@ -5,23 +5,23 @@ import { useState } from 'react';
 type LoginMode = 'signUp' | 'signIn';
 
 const Login = () => {
-  const [loginMode, setLoginMode] = useState<LoginMode>('signUp');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorText, setErrorText] = useState('');
+  const [loginMode, setLoginMode] = useState<LoginMode>(`signUp`);
+  const [email, setEmail] = useState(``);
+  const [password, setPassword] = useState(``);
+  const [errorText, setErrorText] = useState(``);
 
   return (
     <div>
       <i className="text-lg">Ready to join the cruise?</i>
       <div className="py-4">
         <div className="flex-row flex items-center">
-          {loginMode === 'signIn' ? (
+          {loginMode === `signIn` ? (
             <>
               <p className="pr-4 py-4 underline decoration-black">Sign In</p>
               <button
                 className="hover:underline decoration-black"
                 onClick={() => {
-                  setLoginMode('signUp');
+                  setLoginMode(`signUp`);
                 }}
               >
                 Create an account
@@ -32,7 +32,7 @@ const Login = () => {
               <button
                 className="hover:underline decoration-black"
                 onClick={() => {
-                  setLoginMode('signIn');
+                  setLoginMode(`signIn`);
                 }}
               >
                 Sign in
@@ -73,10 +73,10 @@ const Login = () => {
       </div>
       <div className="py-4">
         <Button
-          color={'success'}
+          color={`success`}
           onClick={async () => {
             let response;
-            if (loginMode === 'signUp') {
+            if (loginMode === `signUp`) {
               response = await supabaseClient.auth.signUp({
                 email,
                 password,

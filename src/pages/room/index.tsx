@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
 
   if (pairIndex === -1) {
-    console.error('Cannot find current user in schedule');
+    console.error(`Cannot find current user in schedule`);
     return {
       props: {},
     };
