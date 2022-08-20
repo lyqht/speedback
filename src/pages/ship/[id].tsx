@@ -1,39 +1,54 @@
 import { baseUrl } from '@/Config';
 import { CrewMember } from '@/types/CrewMember';
 import { Ship } from '@/types/Ship';
-import { getUser, supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { getUser, supabaseClient, User } from '@supabase/auth-helpers-nextjs';
+import { Button } from 'flowbite-react';
 import { GetServerSideProps } from 'next';
-import { useEffect } from 'react';
-import Clipboard from '../../components/Clipboard';
+import { useEffect, useState } from 'react';
 import AvatarWithStatus from '../../components/AvatarWithStatus';
+import Clipboard from '../../components/Clipboard';
 
 interface Props {
   ship: Ship;
-  isOwner: boolean;
+  user: User;
+  ready?: boolean;
 }
 
-export default function ShipWaitingHall({ ship }: Props) {
+const addRealtimeNotification = (newContent: string) => {
+  const newElement = document.createElement('p');
+  newElement.appendChild(document.createTextNode(newContent));
+
+  const notificationsCorner = document.getElementById('realtime-notifications');
+  notificationsCorner?.appendChild(newElement);
+
+  setTimeout(() => {
+    notificationsCorner?.removeChild(newElement);
+  }, 1200);
+};
+
+export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
+  // this causes the alert to show up when Next.js auto-refresh from server
+  // useLeavePageConfirm(true);
+
+  const [currentCrew, setCurrentCrew] = useState<CrewMember[]>(ship.crew);
+
+  const isCaptain = ship.captain === user.id;
+  const crewIsReady =
+    currentCrew.length > 0 &&
+    currentCrew.map((member: CrewMember) => member.ready).length ===
+      currentCrew.length;
+
   useEffect(() => {
-    const subscriber = supabaseClient
+    // subscriber for ready checks
+    const readySubscriber = supabaseClient
       .from(`Ship:id=eq.${ship.id}`)
       .on('UPDATE', (payload) => {
-        console.log('Change received!', payload);
-        const newElement = document.createElement('p');
-        newElement.appendChild(document.createTextNode(payload.new));
-
-        const notificationsCorner = document.getElementById(
-          'realtime-notifications',
-        );
-        notificationsCorner?.appendChild(newElement);
-
-        setTimeout(() => {
-          notificationsCorner?.removeChild(newElement);
-        }, 1200);
+        setCurrentCrew(payload.new.crew);
       })
       .subscribe();
 
     return () => {
-      subscriber.unsubscribe();
+      readySubscriber.unsubscribe();
     };
   }, []);
 
@@ -45,11 +60,11 @@ export default function ShipWaitingHall({ ship }: Props) {
         <Clipboard value={ship.code} fieldToBeCopied={'room code'} />
       )}
       <div id="participant-list">
-        <p>Crew joined: {ship.crew.length ?? 0}</p>
+        <p>Crew joined: {currentCrew.length ?? 0}</p>
         <AvatarWithStatus.Captain name={ship.captain} />
 
-        {ship.crew
-          ? ship.crew?.map((crewMember: CrewMember) => (
+        {currentCrew
+          ? currentCrew?.map((crewMember: CrewMember) => (
               <AvatarWithStatus.Crew
                 key={crewMember.userId}
                 name={crewMember.userId}
@@ -57,6 +72,37 @@ export default function ShipWaitingHall({ ship }: Props) {
               />
             ))
           : null}
+      </div>
+      <div
+        id="player-options"
+        className="flex flex-row justify-end align-items-end p-4 m-4"
+      >
+        {!isCaptain ? (
+          <>
+            <button
+              className={`${
+                ready ? 'bg-red-400' : 'bg-green-400'
+              } transition-colors p-4 shadow-sm border text-white`}
+              onClick={async () => {
+                await fetch(`/api/ship/${ship.id}`, {
+                  method: 'POST',
+                  body: JSON.stringify({ userId: user!.id, shipId: ship.id }),
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                });
+              }}
+            >
+              Ready
+            </button>
+          </>
+        ) : (
+          <>
+            <Button disabled={!crewIsReady} gradientDuoTone="greenToBlue">
+              Start Session
+            </Button>
+          </>
+        )}
       </div>
       <div
         id="realtime-notifications"
@@ -70,11 +116,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const ship: Ship = await (
     await fetch(`${baseUrl}/api/ship?id=${context.query.id}`)
   ).json();
+  const crew: CrewMember[] = ship.crew;
 
-  const currentUser = await getUser(context);
-  const isOwner = ship.captain === currentUser.user.id;
+  const { user } = await getUser(context);
+  const ready =
+    crew.find((member) => member.userId === user.id)?.ready ?? false;
 
   return {
-    props: { ship, isOwner },
+    props: { ship, user, ready },
   };
 };
