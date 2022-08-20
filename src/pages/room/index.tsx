@@ -1,5 +1,6 @@
 import { baseUrl } from '@/Config';
 import { Room } from '@/services/RoomService';
+import { DailyCall } from '@daily-co/daily-js';
 import { getUser } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
@@ -7,7 +8,7 @@ import AssignedCall from '../../components/AssignedCall';
 import { Schedule } from '../../types/Schedule';
 
 export function Room({ room, expiry }: Room) {
-  const [callFrame, setCallFrame] = useState(null);
+  const [callFrame, setCallFrame] = useState<DailyCall | null>(null);
 
   return (
     <div className="w-full h-full flex items-center justify-center">

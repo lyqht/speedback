@@ -1,5 +1,5 @@
 import ExpiryTimer from '@/components/ExpiryTimer';
-import DailyIframe from '@daily-co/daily-js';
+import DailyIframe, { DailyCall } from '@daily-co/daily-js';
 import { Card } from 'flowbite-react';
 import { useEffect, useRef } from 'react';
 
@@ -10,20 +10,29 @@ const CALL_OPTIONS = {
   iframeStyle: {
     height: '100%',
     width: '100%',
-    aspectRatio: 16 / 9,
+    aspectRatio: '16 / 9',
     minwidth: '400px',
     border: '0',
     borderRadius: '12px',
   },
 };
 
-export function AssignedCall({ room, callFrame, setCallFrame, expiry }) {
+type Props = {
+  room: string;
+  callFrame: DailyCall | null;
+  setCallFrame: (callframe: DailyCall | null) => void;
+  expiry: number;
+};
+
+export function AssignedCall({ room, callFrame, setCallFrame, expiry }: Props) {
   const callRef = useRef(null);
   let isAlreadyCreated = false;
 
   const leaveCall = () => {
-    setCallFrame(null);
-    callFrame.destroy();
+    if (callFrame) {
+      callFrame.destroy();
+      setCallFrame(null);
+    }
   };
 
   const createAndJoinCall = () => {
@@ -31,7 +40,7 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }) {
       return;
     }
     const newCallFrame = DailyIframe.createFrame(
-      callRef?.current,
+      callRef?.current as any,
       CALL_OPTIONS,
     );
 

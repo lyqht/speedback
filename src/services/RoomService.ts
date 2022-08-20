@@ -2,7 +2,7 @@ import { Json } from './../types/DatabaseDefinitions';
 
 export type Room = Json & {
   id: string;
-  expiry: string;
+  expiry: number;
   room: string;
 };
 
