@@ -10,13 +10,20 @@ export function Room({ room, expiry }: Room) {
   const [callFrame, setCallFrame] = useState(null);
 
   return (
-    <div>
-      <AssignedCall
-        room={room}
-        expiry={expiry}
-        setCallFrame={setCallFrame}
-        callFrame={callFrame}
-      />
+    <div className="w-full h-full flex items-center justify-center">
+      {room ? (
+        <AssignedCall
+          room={room}
+          expiry={expiry}
+          setCallFrame={setCallFrame}
+          callFrame={callFrame}
+        />
+      ) : (
+        <div>
+          <p>You are not assigned to a room for now.</p>
+          <p>In the mean time, sit back and relax. Take a break.</p>
+        </div>
+      )}
     </div>
   );
 }

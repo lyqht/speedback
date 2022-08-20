@@ -12,7 +12,6 @@ const CALL_OPTIONS = {
     width: '100%',
     aspectRatio: 16 / 9,
     minwidth: '400px',
-    maxWidth: '920px',
     border: '0',
     borderRadius: '12px',
   },
@@ -23,7 +22,6 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }) {
   let isAlreadyCreated = false;
 
   const leaveCall = () => {
-    // setRoom(null);
     setCallFrame(null);
     callFrame.destroy();
   };
@@ -49,20 +47,18 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }) {
   }, []);
 
   return (
-    <div>
-      <div className="call-container">
-        <div id="call" ref={callRef} />
-        <Card>
-          <div>
-            {expiry && (
-              <div>
-                Room expires in:
-                <ExpiryTimer expiry={expiry} />
-              </div>
-            )}
-          </div>
-        </Card>
-      </div>
+    <div className="w-full h-full p-8">
+      <div id="call" ref={callRef} />
+      <Card>
+        <div>
+          {expiry && (
+            <div>
+              Room expires in:
+              <ExpiryTimer expiry={expiry} />
+            </div>
+          )}
+        </div>
+      </Card>
     </div>
   );
 }
