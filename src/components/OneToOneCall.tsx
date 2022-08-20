@@ -4,8 +4,8 @@ import { Card } from 'flowbite-react';
 import { useEffect, useRef } from 'react';
 import Clipboard from './Clipboard';
 
-// TODO: checkout responsive iframe styles
-// https://www.benmarshall.me/responsive-iframes/
+// Unused component for now
+
 const CALL_OPTIONS = {
   showLeaveButton: true,
   iframeStyle: {
@@ -19,12 +19,12 @@ const CALL_OPTIONS = {
   },
 };
 
-export function Call({ room, setRoom, callFrame, setCallFrame, expiry }) {
+export function Call({ room, callFrame, setCallFrame, expiry }) {
   const callRef = useRef(null);
   let isAlreadyCreated = false;
 
   const leaveCall = () => {
-    setRoom(null);
+    // setRoom(null);
     setCallFrame(null);
     callFrame.destroy();
   };

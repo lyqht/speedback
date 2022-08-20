@@ -1,18 +1,53 @@
 import { baseUrl } from '@/Config';
+import { createRoom } from '@/services/RoomService';
 import { CrewMember } from '@/types/CrewMember';
+import { Schedule } from '@/types/Schedule';
 import { Ship } from '@/types/Ship';
 import { getUser, supabaseClient, User } from '@supabase/auth-helpers-nextjs';
-import { Button } from 'flowbite-react';
 import { GetServerSideProps } from 'next';
+import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import AvatarWithStatus from '../../components/AvatarWithStatus';
 import Clipboard from '../../components/Clipboard';
+import { generatePairingRoundSequence } from '../../helpers/schedule-generator';
+import { Room } from '../../services/RoomService';
 
 interface Props {
   ship: Ship;
   user: User;
   ready?: boolean;
 }
+
+const setReadyStatus = async (userId: string, shipId: string) => {
+  await fetch(`/api/ship/${shipId}`, {
+    method: 'POST',
+    body: JSON.stringify({ userId, shipId }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+const startSpeedbackSession = async (playerIds: string[], shipId: string) => {
+  const sequence = generatePairingRoundSequence(playerIds);
+  const roomsToCreate: Promise<Room>[] = [];
+  try {
+    sequence.forEach(() => {
+      roomsToCreate.push(createRoom());
+    });
+    const rooms = await Promise.all(roomsToCreate);
+
+    await fetch(`/api/schedule`, {
+      method: 'POST',
+      body: JSON.stringify({ sequence, shipId, rooms }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (err) {
+    console.error(JSON.stringify(err));
+  }
+};
 
 const addRealtimeNotification = (newContent: string) => {
   const newElement = document.createElement('p');
@@ -32,12 +67,6 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
 
   const [currentCrew, setCurrentCrew] = useState<CrewMember[]>(ship.crew);
 
-  const isCaptain = ship.captain === user.id;
-  const crewIsReady =
-    currentCrew.length > 0 &&
-    currentCrew.map((member: CrewMember) => member.ready).length ===
-      currentCrew.length;
-
   useEffect(() => {
     // subscriber for ready checks
     const readySubscriber = supabaseClient
@@ -47,10 +76,29 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
       })
       .subscribe();
 
+    const scheduleSubscriber = supabaseClient
+      .from(`Schedule:shipId=eq.${ship.id}`)
+      .on('INSERT', (payload) => {
+        console.log('New schedule added');
+        console.log(payload.new);
+        const insertedSchedule: Schedule = payload.new;
+        Router.push(`/room?scheduleId=${insertedSchedule.id}`);
+      })
+      .subscribe();
+
     return () => {
       readySubscriber.unsubscribe();
+      scheduleSubscriber.unsubscribe();
     };
   }, []);
+
+  const isCaptain = ship.captain === user.id;
+  const allCrewIsReady =
+    currentCrew.length > 0 &&
+    currentCrew.filter((member: CrewMember) => member.ready === true).length ===
+      currentCrew.length;
+
+  const crewActionButtonColor = ready ? 'bg-red-400' : 'bg-green-400';
 
   return (
     <div className="h-full">
@@ -80,17 +128,9 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
         {!isCaptain ? (
           <>
             <button
-              className={`${
-                ready ? 'bg-red-400' : 'bg-green-400'
-              } transition-colors p-4 shadow-sm border text-white`}
+              className={`${crewActionButtonColor} transition-colors p-4 shadow-sm border text-white rounded-lg`}
               onClick={async () => {
-                await fetch(`/api/ship/${ship.id}`, {
-                  method: 'POST',
-                  body: JSON.stringify({ userId: user!.id, shipId: ship.id }),
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                });
+                await setReadyStatus(user.id, ship.id);
               }}
             >
               Ready
@@ -98,9 +138,20 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
           </>
         ) : (
           <>
-            <Button disabled={!crewIsReady} gradientDuoTone="greenToBlue">
-              Start Session
-            </Button>
+            <button
+              disabled={!allCrewIsReady}
+              className={`${
+                allCrewIsReady ? 'bg-green-400' : 'bg-gray-400'
+              } hover:shadow-lg transition-colors p-4 shadow-sm border text-white rounded-lg`}
+              onClick={() => {
+                startSpeedbackSession(
+                  [...currentCrew.map((member) => member.userId), ship.captain],
+                  ship.id,
+                );
+              }}
+            >
+              Start New Voyage
+            </button>
           </>
         )}
       </div>
