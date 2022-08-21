@@ -42,19 +42,25 @@ export interface Database {
           id: string;
           created_at: string | null;
           userId: string;
-          avatarUrl: string | null;
+          avatarUrl?: string | null;
+          nickname?: string | null;
+          shipId: string | null;
         };
         Insert: {
           id: string;
           created_at?: string | null;
           userId: string;
           avatarUrl?: string | null;
+          nickname?: string | null;
+          shipId?: string | null;
         };
         Update: {
           id?: string;
           created_at?: string | null;
           userId?: string;
           avatarUrl?: string | null;
+          nickname?: string | null;
+          shipId?: string | null;
         };
       };
       Schedule: {

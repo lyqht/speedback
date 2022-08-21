@@ -1,6 +1,9 @@
 import { CrewMember } from '@/types/CrewMember';
 import { Ship } from '@/types/Ship';
+import { UserMetadata } from '@/types/UserMetadata';
+import { faker } from '@faker-js/faker';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { v4 } from 'uuid';
 import { supabase } from '../auth/[...supabase]';
 
 const joinShip = async ({
@@ -37,6 +40,19 @@ const joinShip = async ({
 
   if (crewIsAlreadyInRoom || userIsCaptain) {
     return foundShip;
+  }
+
+  const { error: createMetadataError } = await supabase
+    .from<UserMetadata>(`UserMetadata`)
+    .insert({
+      id: v4(),
+      userId,
+      shipId,
+      nickname: faker.animal.bird(),
+    });
+
+  if (createMetadataError) {
+    throw new Error(JSON.stringify(createMetadataError));
   }
 
   const { data, error } = await supabase

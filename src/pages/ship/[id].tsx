@@ -3,7 +3,7 @@ import GeneralLayout from '@/layouts/GeneralLayout';
 import { createRoom } from '@/services/RoomService';
 import { CrewMember } from '@/types/CrewMember';
 import { Schedule } from '@/types/Schedule';
-import { Ship } from '@/types/Ship';
+import { CrewMetadata, Ship } from '@/types/Ship';
 import { getUser, supabaseClient, User } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import Router from 'next/router';
@@ -12,9 +12,10 @@ import AvatarWithStatus from '../../components/AvatarWithStatus';
 import Clipboard from '../../components/Clipboard';
 import { generatePairingRoundSequence } from '../../helpers/schedule-generator';
 import { Room } from '../../services/RoomService';
+import { ShipWithMetadata } from '../../types/Ship';
 
 interface Props {
-  ship: Ship;
+  ship: ShipWithMetadata;
   user: User;
   ready?: boolean;
 }
@@ -66,7 +67,7 @@ export default function ShipWaitingHall({ ship, user }: Props) {
   // this causes the alert to show up when Next.js auto-refresh from server
   // useLeavePageConfirm(true);
 
-  const [currentCrew, setCurrentCrew] = useState<CrewMember[]>(ship.crew);
+  const [currentCrew, setCurrentCrew] = useState<CrewMetadata[]>(ship.crew);
   const ready =
     currentCrew.find((member) => member.userId === user.id)?.ready ?? false;
 
@@ -95,7 +96,7 @@ export default function ShipWaitingHall({ ship, user }: Props) {
     };
   }, []);
 
-  const isCaptain = ship.captain === user.id;
+  const isCaptain = ship.captain.userId === user.id;
   const readyCrew = currentCrew.filter(
     (member: CrewMember) => member.ready === true,
   );
@@ -126,12 +127,12 @@ export default function ShipWaitingHall({ ship, user }: Props) {
             id="participant-list"
             className="flex h-full flex-col items-start gap-4 overflow-y-auto"
           >
-            <AvatarWithStatus.Captain name={ship.captain} />
+            <AvatarWithStatus.Captain name={ship.captain.nickname!} />
             {currentCrew
-              ? currentCrew?.map((crewMember: CrewMember) => (
+              ? currentCrew?.map((crewMember: CrewMetadata) => (
                   <AvatarWithStatus.Crew
                     key={crewMember.userId}
-                    name={crewMember.userId}
+                    name={crewMember.nickname!}
                     ready={crewMember.ready}
                   />
                 ))
@@ -170,7 +171,7 @@ export default function ShipWaitingHall({ ship, user }: Props) {
                     startSpeedbackSession(
                       [
                         ...currentCrew.map((member) => member.userId),
-                        ship.captain,
+                        ship.captain.userId,
                       ],
                       ship.id,
                     );
