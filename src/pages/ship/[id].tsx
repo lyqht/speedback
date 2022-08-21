@@ -157,13 +157,17 @@ export default function ShipWaitingHall({ ship, user }: Props) {
             id="participant-list"
             className="flex h-full flex-col items-start gap-4 overflow-y-auto"
           >
-            <AvatarWithStatus.Captain name={ship.captain.nickname!} />
+            <AvatarWithStatus.Captain
+              name={ship.captain.nickname!}
+              isUser={ship.captain.userId === user.id}
+            />
             {currentCrew
               ? currentCrew?.map((crewMember: CrewMetadata) => (
                   <AvatarWithStatus.Crew
                     key={crewMember.userId}
                     name={crewMember.nickname!}
                     ready={crewMember.ready}
+                    isUser={crewMember.userId === user.id}
                   />
                 ))
               : null}
