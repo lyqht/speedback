@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const getExpiryDateOfRoom = () => Math.round(Date.now() / 1000) + 3600;
+const getExpiryDateOfRoom = () => Math.round(Date.now() / 1000) + 7200;
 
 export default async function handler(
   req: NextApiRequest,
