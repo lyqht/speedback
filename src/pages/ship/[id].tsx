@@ -123,12 +123,12 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
       </div>
       <div
         id="player-options"
-        className="flex flex-row justify-end align-items-end p-4 m-4"
+        className="align-items-end m-4 flex flex-row justify-end p-4"
       >
         {!isCaptain ? (
           <>
             <button
-              className={`${crewActionButtonColor} transition-colors p-4 shadow-sm border text-white rounded-lg`}
+              className={`${crewActionButtonColor} rounded-lg border p-4 text-white shadow-sm transition-colors`}
               onClick={async () => {
                 await setReadyStatus(user.id, ship.id);
               }}
@@ -142,7 +142,7 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
               disabled={!allCrewIsReady}
               className={`${
                 allCrewIsReady ? `bg-green-400` : `bg-gray-400`
-              } hover:shadow-lg transition-colors p-4 shadow-sm border text-white rounded-lg`}
+              } rounded-lg border p-4 text-white shadow-sm transition-colors hover:shadow-lg`}
               onClick={() => {
                 startSpeedbackSession(
                   [...currentCrew.map((member) => member.userId), ship.captain],
@@ -157,7 +157,7 @@ export default function ShipWaitingHall({ ship, user, ready = false }: Props) {
       </div>
       <div
         id="realtime-notifications"
-        className="border-solid border-4 border-blue-400 bg-slate-400 h-1/3 w-1/3"
+        className="h-1/3 w-1/3 border-4 border-solid border-blue-400 bg-slate-400"
       />
     </div>
   );

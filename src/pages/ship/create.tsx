@@ -1,6 +1,6 @@
 import GeneralLayout from '@/layouts/GeneralLayout';
 import { useUser } from '@supabase/auth-helpers-react';
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Button, TextInput } from 'flowbite-react';
 import Router from 'next/router';
 import { useState } from 'react';
 
@@ -11,8 +11,8 @@ export default function CreateShip() {
 
   return (
     <GeneralLayout>
-      <div className="w-full flex flex-col items-center justify-center gap-4 h-full p-8">
-        <h1 className="text-2xl font-dynapuff">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8">
+        <h1 className="font-dynapuff text-2xl">
           Create a Ship for your crew to join!
         </h1>
         <div className="w-full md:w-1/2">
@@ -33,7 +33,10 @@ export default function CreateShip() {
             setLoading(true);
             const response = await fetch(`/api/ship`, {
               method: `POST`,
-              body: JSON.stringify({ captain: user!.id, ship: shipName }),
+              body: JSON.stringify({
+                captain: user!.id,
+                ship: shipName,
+              }),
               headers: {
                 'Content-Type': `application/json`,
               },

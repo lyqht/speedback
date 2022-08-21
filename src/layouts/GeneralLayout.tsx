@@ -3,19 +3,19 @@ import Header from '@/components/Header';
 const GeneralLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
-      <main className="h-full justify-between flex flex-col">
-        <div id="main-content" className="p-8 h-full">
+      <main className="flex h-full flex-col justify-between">
+        <div id="main-content" className="h-full p-8">
           <Header />
           {children}
         </div>
-        <div className="w-full relative">
+        <div className="relative w-full">
           <img
             id="bottom-background"
             alt="Background waves"
-            className="w-full bg-cover opacity-60 -z-20"
+            className="-z-20 w-full bg-cover opacity-60"
             src={`/bottom_waves.svg`}
           />
-          <div className="font-dynapuff absolute bottom-0 right-0 text-white text-lg p-4 flex flex-col items-end">
+          <div className="absolute bottom-0 right-0 flex flex-col items-end p-4 font-dynapuff text-lg text-white">
             <p>
               Made by{` `}
               <a
@@ -26,11 +26,11 @@ const GeneralLayout = ({ children }: { children: React.ReactNode }) => {
               </a>
             </p>
             <a
-              className="flex flex-row underline decoration-white decoration-4 underline-offset-4 items-center"
+              className="flex flex-row items-center underline decoration-white decoration-4 underline-offset-4"
               href={`https://github.com/lyqht/speedback`}
             >
               <img
-                className="w-8 h-8 mt-2 bg-white rounded"
+                className="mt-2 h-8 w-8 rounded bg-white"
                 src="https://api.iconify.design/charm:github.svg"
                 alt="GitHub"
               />

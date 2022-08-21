@@ -11,8 +11,8 @@ interface CrewAvatarProps extends AvatarProps {
 
 const Captain: React.FC<AvatarProps> = ({ name }) => {
   return (
-    <div className="p-4 w-1/2">
-      <div className="flex justify-center items-center">
+    <div className="w-1/2 p-4">
+      <div className="flex items-center justify-center">
         <div className="relative">
           <Avvvatars value={name} style="shape" size={48} />
           <Badge
@@ -30,14 +30,14 @@ const Captain: React.FC<AvatarProps> = ({ name }) => {
 
 const Crew: React.FC<CrewAvatarProps> = ({ name, ready }) => {
   return (
-    <div className="p-4 border-4 border-solid border-slate-400">
+    <div className="border-4 border-solid border-slate-400 p-4">
       <div className="flex">
         <div>
           <Avvvatars value={name} style="shape" />
           <div className="absolute bottom-0 right-0">
             {ready ? (
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ const Crew: React.FC<CrewAvatarProps> = ({ name, ready }) => {
               </svg>
             ) : (
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

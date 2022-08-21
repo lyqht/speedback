@@ -16,7 +16,7 @@ const Clipboard: React.FC<Props> = ({ value, fieldToBeCopied }) => {
   };
 
   return (
-    <div className="border shadow border-indigo-600">
+    <div className="border border-indigo-600 shadow">
       <p className="w-full p-4 font-bold">{value}</p>
       <Button onClick={handleCopyClick}>
         {isLinkCopied ? `Copied!` : `Copy ${fieldToBeCopied}`}

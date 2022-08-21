@@ -11,7 +11,7 @@ export default function JoinShip() {
 
   return (
     <GeneralLayout>
-      <div className="w-full flex flex-col items-center justify-center gap-4 h-full p-8">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-8">
         <h1 className="font-dynapuff text-2xl">Join a Ship</h1>
         <p className="italic">Get the ship code from one of your mates!</p>
         <TextInput
@@ -30,7 +30,10 @@ export default function JoinShip() {
             setLoading(true);
             const response = await fetch(`/api/ship/join`, {
               method: `POST`,
-              body: JSON.stringify({ userId: user!.id, shipCode }),
+              body: JSON.stringify({
+                userId: user!.id,
+                shipCode,
+              }),
               headers: {
                 'Content-Type': `application/json`,
               },

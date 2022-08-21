@@ -1,7 +1,7 @@
 const Header = () => (
-  <div className="grid place-items-center w-full">
-    <h1 className="text-6xl text-center font-dynapuff">Ahoy!</h1>
-    <p className="text-2xl text-center">Assemble your crew 🏴‍☠️</p>
+  <div className="grid w-full place-items-center">
+    <h1 className="text-center font-dynapuff text-6xl">Ahoy!</h1>
+    <p className="text-center text-2xl">Assemble your crew 🏴‍☠️</p>
   </div>
 );
 

@@ -25,22 +25,22 @@ export default function Home() {
       <GeneralLayout>
         <div className="grid place-items-center p-4">
           {currentUser ? (
-            <div className="w-3/4 h-full items-center flex-row flex justify-evenly align-top">
-              <div className="h-1/4 m-4 items-center flex flex-col p-4 justify-start">
-                <h1 className="text-2xl font-dynapuff pb-4">
+            <div className="flex h-full w-3/4 flex-row items-center justify-evenly align-top">
+              <div className="m-4 flex h-1/4 flex-col items-center justify-start p-4">
+                <h1 className="pb-4 font-dynapuff text-2xl">
                   Are you a captain?
                 </h1>
                 <Button size={`xl`} href="/ship/create">
                   Create a Ship
                 </Button>
                 <Link href="/ship/join">
-                  <p className="text-sm italic hover:text-blue-400 hover:cursor-pointer">
+                  <p className="text-sm italic hover:cursor-pointer hover:text-blue-400">
                     Join back a Ship
                   </p>
                 </Link>
               </div>
-              <div className="h-1/4 m-4 items-center flex flex-col p-4 justify-start">
-                <h1 className="text-2xl font-dynapuff pb-4">Are you a crew?</h1>
+              <div className="m-4 flex h-1/4 flex-col items-center justify-start p-4">
+                <h1 className="pb-4 font-dynapuff text-2xl">Are you a crew?</h1>
                 <Button size={`xl`} href="/ship/join">
                   Join a Ship
                 </Button>

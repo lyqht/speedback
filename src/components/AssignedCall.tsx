@@ -56,7 +56,7 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }: Props) {
   }, []);
 
   return (
-    <div className="w-full h-full p-8">
+    <div className="h-full w-full p-8">
       <div id="call" ref={callRef} />
       <Card>
         <div>

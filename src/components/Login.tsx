@@ -11,8 +11,8 @@ const Login = () => {
   const [errorText, setErrorText] = useState(``);
 
   return (
-    <div className="w-full m-4 flex items-center flex-col md:flex-row mt-4 gap-4 h-full">
-      <div className="md:w-1/2 md:p-12 flex flex-col h-full text-lg">
+    <div className="m-4 mt-4 flex h-full w-full flex-col items-center gap-4 md:flex-row">
+      <div className="flex h-full flex-col text-lg md:w-1/2 md:p-12">
         <p>
           Speedback is an intentional, timeboxed session to exchange feedback
           among a team.
@@ -25,19 +25,19 @@ const Login = () => {
       </div>
       <div
         id="login-content"
-        className="p-8 md:p-12 w-full md:w-1/2 bg-blue-200 rounded shadow"
+        className="w-full rounded bg-blue-200 p-8 shadow md:w-1/2 md:p-12"
       >
-        <p className="text-lg font-dynapuff italic">
+        <p className="font-dynapuff text-lg italic">
           Ready to join the cruise?
         </p>
-        <div className="flex-row flex items-center my-4">
+        <div className="my-4 flex flex-row items-center">
           {loginMode === `signIn` ? (
             <>
-              <p className="-ml-2 p-2 bg-blue-600 text-white rounded">
+              <p className="-ml-2 rounded bg-blue-600 p-2 text-white">
                 Sign In
               </p>
               <button
-                className="p-2 opacity-60 rounded hover:bg-blue-400 hover:text-white hover:opacity-100"
+                className="rounded p-2 opacity-60 hover:bg-blue-400 hover:text-white hover:opacity-100"
                 onClick={() => {
                   setLoginMode(`signUp`);
                 }}
@@ -48,14 +48,14 @@ const Login = () => {
           ) : (
             <>
               <button
-                className="p-2 -ml-2 opacity-60 rounded hover:bg-blue-400 hover:text-white hover:opacity-100"
+                className="-ml-2 rounded p-2 opacity-60 hover:bg-blue-400 hover:text-white hover:opacity-100"
                 onClick={() => {
                   setLoginMode(`signIn`);
                 }}
               >
                 Sign in
               </button>
-              <p className="p-2 bg-blue-600 text-white rounded">
+              <p className="rounded bg-blue-600 p-2 text-white">
                 Create for an account
               </p>
             </>
