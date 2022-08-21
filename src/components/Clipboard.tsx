@@ -16,11 +16,13 @@ const Clipboard: React.FC<Props> = ({ value, fieldToBeCopied }) => {
   };
 
   return (
-    <div className="border border-indigo-600 shadow">
-      <p className="w-full p-4 font-bold">{value}</p>
-      <Button onClick={handleCopyClick}>
-        {isLinkCopied ? `Copied!` : `Copy ${fieldToBeCopied}`}
-      </Button>
+    <div className="flex flex-row rounded-full border py-2 px-4">
+      <p className="pr-4">
+        {fieldToBeCopied}: {value}
+      </p>
+      <button onClick={handleCopyClick}>
+        {isLinkCopied ? `Copied!` : `Copy`}
+      </button>
     </div>
   );
 };

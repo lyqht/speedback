@@ -8,11 +8,11 @@ const GeneralLayout = ({ children }: { children: React.ReactNode }) => {
           <Header />
           {children}
         </div>
-        <div className="relative w-full">
+        <div className="relative -z-20 w-full">
           <img
             id="bottom-background"
             alt="Background waves"
-            className="-z-20 w-full bg-cover opacity-60"
+            className="w-full bg-cover opacity-60"
             src={`/bottom_waves.svg`}
           />
           <div className="absolute bottom-0 right-0 flex flex-col items-end p-4 font-dynapuff text-lg text-white">
