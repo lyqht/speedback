@@ -1,10 +1,9 @@
+import { Ship } from '@/types/Ship';
 import { faker } from '@faker-js/faker';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 } from 'uuid';
-import { supabase } from '../auth/[...supabase]';
 import { UserMetadata } from '../../../types/UserMetadata';
-import { Ship, ShipWithMetadata } from '@/types/Ship';
-import { CrewMember } from '../../../types/CrewMember';
+import { supabase } from '../auth/[...supabase]';
 
 const createShip = async ({
   captain,
@@ -85,36 +84,7 @@ export default async function handler(
     }
 
     const ship = data[0];
-    const { data: allPlayersMetadata, error: metadataError } = await supabase
-      .from<UserMetadata>(`UserMetadata`)
-      .select()
-      .eq(`shipId`, id as string);
-
-    if (metadataError) {
-      console.error(JSON.stringify(metadataError));
-    }
-
-    const captainMetadataIndex = allPlayersMetadata!.findIndex(
-      (metadata) => metadata.userId === ship.captain,
-    );
-    const captainMetadata = allPlayersMetadata![captainMetadataIndex];
-    allPlayersMetadata!.splice(captainMetadataIndex, 1);
-    const crewMetadataWithStatus = allPlayersMetadata!.map((metadata) => ({
-      ...metadata,
-      ready: ship.crew.find(
-        (member: CrewMember) => member.userId === metadata.userId,
-      )?.ready,
-    }));
-
-    const shipWithAllPlayersMetadata = {
-      ...ship,
-      captain: {
-        ...captainMetadata,
-      },
-      crew: [...crewMetadataWithStatus],
-    } as ShipWithMetadata;
-
-    return res.status(200).json(shipWithAllPlayersMetadata);
+    return res.status(200).json(ship);
   }
 
   return res.status(500);

@@ -30,6 +30,25 @@ const setReadyStatus = async (userId: string, shipId: string) => {
   });
 };
 
+const getPlayerMetadata = async (
+  shipId: string,
+  captainId: string,
+  crew: CrewMember[] | CrewMetadata[],
+) => {
+  const result = await fetch(`${baseUrl}/api/usermetadata`, {
+    method: `POST`,
+    headers: {
+      'Content-Type': `application/json`,
+    },
+    body: JSON.stringify({
+      shipId,
+      captainId,
+      crew,
+    }),
+  });
+  return result.json();
+};
+
 const startSpeedbackSession = async (playerIds: string[], shipId: string) => {
   const sequence = generatePairingRoundSequence(playerIds);
   const roomsToCreate: Promise<Room>[] = [];
@@ -72,26 +91,37 @@ export default function ShipWaitingHall({ ship, user }: Props) {
     currentCrew.find((member) => member.userId === user.id)?.ready ?? false;
 
   useEffect(() => {
-    // subscriber for ready checks
-    const readySubscriber = supabaseClient
+    const shipSubscriber = supabaseClient
       .from(`Ship:id=eq.${ship.id}`)
-      .on(`UPDATE`, (payload) => {
-        setCurrentCrew(payload.new.crew);
+      .on(`UPDATE`, async (payload) => {
+        const updatedCrewListWithReadyStatus = payload.new.crew;
+        const playerMetadata = await getPlayerMetadata(
+          ship.id,
+          ship.captain.userId,
+          updatedCrewListWithReadyStatus,
+        );
+        setCurrentCrew(
+          playerMetadata.crew.map((member: CrewMetadata) => ({
+            ...member,
+            ready: updatedCrewListWithReadyStatus.find(
+              (memberWithReadyStatus: CrewMember) =>
+                member.userId === memberWithReadyStatus.userId,
+            )?.ready,
+          })),
+        );
       })
       .subscribe();
 
     const scheduleSubscriber = supabaseClient
       .from(`Schedule:shipId=eq.${ship.id}`)
       .on(`INSERT`, (payload) => {
-        console.log(`New schedule added`);
-        console.log(payload.new);
         const insertedSchedule: Schedule = payload.new;
         Router.push(`/room?scheduleId=${insertedSchedule.id}`);
       })
       .subscribe();
 
     return () => {
-      readySubscriber.unsubscribe();
+      shipSubscriber.unsubscribe();
       scheduleSubscriber.unsubscribe();
     };
   }, []);
@@ -197,9 +227,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     await fetch(`${baseUrl}/api/ship?id=${context.query.id}`)
   ).json();
 
+  const playerMetadata = await getPlayerMetadata(
+    ship.id,
+    ship.captain,
+    ship.crew,
+  );
+
   const { user } = await getUser(context);
 
   return {
-    props: { ship, user },
+    props: { ship: { ...ship, ...playerMetadata }, user },
   };
 };
