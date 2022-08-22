@@ -58,7 +58,7 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }: Props) {
   return (
     <div className="h-full w-full p-8">
       <div id="call" ref={callRef} />
-      <Card>
+      {/* <Card>
         <div>
           {expiry && (
             <div>
@@ -67,7 +67,7 @@ export function AssignedCall({ room, callFrame, setCallFrame, expiry }: Props) {
             </div>
           )}
         </div>
-      </Card>
+      </Card> */}
     </div>
   );
 }
