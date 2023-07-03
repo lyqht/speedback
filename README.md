@@ -1,6 +1,6 @@
 # Ahoy!
 
-A pirate-themed app to generate Zoom-like breakout rooms for your next Speedback session.
+A pirate-themed app to generate Zoom-like breakout rooms for your next [Speedback](https://www.google.com/search?q=speedback&sourceid=chrome&ie=UTF-8) session.
 
 ![](public/bottom_waves.svg)
 
